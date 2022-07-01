@@ -14,13 +14,13 @@ WITH SCHEMABINDING,
      NATIVE_COMPILATION
 as
 Return (
-select 
-	 f.Nazwa_filmu
-	,r.godzina
-	,k.dzień
-from mem.repertuar as r
-inner join mem.filmy as f
-on f.id_filmu = r.id_filmu
-inner join mem.kalendarz as k
-on k.id_dnia = r.id_data
-where k.dzień >= @dzień and k.dzień < DATEADD(dd,1,@dzień))
+         select f.Nazwa_filmu
+              , r.godzina
+              , k.dzień
+           from mem.repertuar as r
+     inner join mem.filmy     as f
+             on f.id_filmu = r.id_filmu
+     inner join mem.kalendarz as k
+             on k.id_dnia = r.id_data
+          where k.dzień >= @dzień 
+            and k.dzień < DATEADD(dd,1,@dzień))
