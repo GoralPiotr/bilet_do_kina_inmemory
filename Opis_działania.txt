@@ -1,0 +1,30 @@
+Bilet_do_kina_inmemory: 
+Baza danych stworzona w celu zasymulowania środowiska sprzedaży biletów. Jet to ten sam projekt co baza danych „bilet_do_kina” tylko że stworzona w technologii „In memory OLTP”. Ponieważ technologia nie posiada wszystkich funkcjonalności zastąpiono niektóre elementy tradycyjnymi tabelami dyskowymi, zastosowaniem innych zapytań TSQL czy zrezygnowaniem z natywnie skompilowanej procedury. 
+
+Opis najważniejszych procedur:
+
+Za sprawą poniższej procedury użytkownik zobaczy repertuar na dany dzień 
+Wybrany poprzez parametr. W przypadku braku parametru procedura pokaże dzień dzisiejszy:
+exec mem.pokaż_repertuar
+@data = '20220704'
+
+Poniższa procedura pokazuje wolne miejsca na wybrany przez użytkowania seans, miejsca wcześniej wybrane nie pokażą się w wyniku:
+exec mem.pokaż_miejsca
+@nazwa_filmu = 'Matrix4',
+@data_seansu = '20220704',
+@godzina_seansu = '21:00'
+Poprzez procedurę wybieramy miejsce na wybrany seans. Ponowny wybór tego samego miejsca, na ten sam seans powoduje usunięcie naszego wyboru:
+
+exec mem.wybór_miejsca
+@nazwa_filmu = 'Matrix4',
+@data_seansu = '20220704',
+@godzina_seansu = '21:00',
+@miejsce = 1
+
+Za sprawą poniższej procedury, rezerwujemy wybrane miejsca. Konstrukcja bazy danych pozwala przed rezerwacją wybrać tylko 3 miejsca. Bardzo ważnym elementem jest numer sesji gdyż jako zmienna, zostanie przechwycony i na jego podstawie wykonane dalsza transakcja. Użytkownik podaje swój email oraz jaki rodzaj biletu (normalny, szkolny, senior) go interesuje. Przykład procedury:
+
+exec mem.rezerwacja_biletu
+@email = 'goral.p@interia.pl',
+@rodzaj_biletu1 = 'Normalny',
+@rodzaj_biletu2 = 'Szkolny',
+@rodzaj_biletu3 = 'Senior'
